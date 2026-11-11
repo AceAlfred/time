@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Time</title>
+<meta name="theme-color" content="#14213D">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  html, body { margin: 0; height: 100%; background: #14213D; }
+  iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #F3F5F8; }
+  .help { position: fixed; left: 0; right: 0; bottom: 0; padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    background: #14213D; color: #EEF2FA; font: 15px/1.4 system-ui, sans-serif; text-align: center; }
+  .help a { color: #9DBBFF; font-weight: 600; }
+</style>
+</head>
+<body>
+<script>
+  /* ===== PASTE YOUR WEB APP URL BETWEEN THE QUOTES (it ends with /exec) ===== */
+  const APP_URL = "https://script.google.com/macros/s/AKfycbxb1KLOWYy0dcg63eFi84IlyslTbYib87D-seZNtAq82CpsksihHGHwaFepsfBeyzRvfQ/exec";
+  /* ======================================================================== */
+
+  if (APP_URL.indexOf("/exec") === -1) {
+    document.body.innerHTML = '<div class="help">Hour Log isn\'t set up yet. Paste your web app URL into index.html.</div>';
+  } else {
+    const f = document.createElement("iframe");
+    f.src = APP_URL;
+    f.title = "Time";
+    document.body.appendChild(f);
+    // If Google needs you to sign in, it can't show the sign-in page inside the app.
+    // This link opens the app directly so you can sign in, then come back.
+    const help = document.createElement("div");
+    help.className = "help";
+    help.hidden = true;
+    help.innerHTML = 'Blank screen? <a href="' + APP_URL + '" target="_blank" rel="noopener">Sign in to Google here</a>, then come back and reload.';
+    document.body.appendChild(help);
+    let loaded = false;
+    f.addEventListener("load", function () { loaded = true; });
+    setTimeout(function () { if (!loaded) help.hidden = false; }, 8000);
+  }
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+</script>
+</body>
+</html>
